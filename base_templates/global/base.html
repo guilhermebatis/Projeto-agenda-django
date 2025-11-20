@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ site_title }} Agenda</title>
+    <link rel="stylesheet" href="{% static 'global/css/main_style.css' %}" />
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="header-heading"><a href="{% url 'contact:index' %}" class="header-link">Agenda</a></h1>
+
+      <nav class="menu">
+        <ul class="menu-list">
+          {% if user.is_authenticated %}
+          <li class="menu-item">
+            <a href="{% url 'contact:create' %}" class="menu-link">Create</a>
+          </li>
+          <li class="menu-item">
+            <a href="{% url 'contact:user_update' %}" class="menu-link">Profile</a>
+          </li>
+          <li class="menu-item">
+            <a href="{% url 'contact:logout' %}" class="menu-link">Logout</a>
+          </li>
+
+          {% else %}
+          <li class="menu-item">
+            <a href="{% url 'contact:login' %}" class="menu-link">Login</a>
+          </li>
+          <li class="menu-item">
+            <a href="{% url 'contact:register' %}" class="menu-link">Register</a>
+          </li>
+          {% endif %}
+
+        </ul>
+      </nav>
+      <div class="search">
+        <form action="{% url 'contact:search' %}" method="get">
+          <input type="text" class="search-input" placeholder="search" id="search" name="q" value="{{ search_value }}" />
+        </form>
+      </div>
+    </header>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="message {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+
+    <main class="content">
+      {% block content %}
+
+      {% endblock %}
+
+      {% include 'global/_paginator.html' %}
+    </main>
+  </body>
+</html>
